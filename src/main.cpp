@@ -69,6 +69,8 @@
 const byte CABIN_LIGHTS_PIN = 10;    // pin controlling the cabin lights
 const byte STORAGE_LIGHTS_PIN = 11;  // pin controlling the storage lights
 const byte COCKPIT_LIGHTS_PIN = 12;  // pin controlling the exterior lights
+const byte NIGHT_LIGHT1 = 6;
+const byte NIGHT_LIGHT2 = 7;
  
 // We will use a different input pin for each of our DIP switches and
 // we'll label them using the color of the LED that each switch will control.
@@ -85,6 +87,8 @@ void setup() {
   pinMode(CABIN_LIGHTS_PIN, OUTPUT);    // pin controlling the cabin lights
   pinMode(STORAGE_LIGHTS_PIN, OUTPUT);  // pin controlling the storage lights
   pinMode(COCKPIT_LIGHTS_PIN, OUTPUT);  // pin controlling the exterior lights
+  pinMode(NIGHT_LIGHT1, OUTPUT);
+  pinMode(NIGHT_LIGHT2, OUTPUT);
  
   // Configure the switch pins as INPUT pins
   pinMode(CABIN_LIGHTS_SWITCH_PIN, INPUT);    // pin connected to switch 1 (cabin lights)
@@ -118,4 +122,7 @@ void loop() {
   } else {
     digitalWrite(COCKPIT_LIGHTS_PIN, LOW);  // turn off LED by setting output to LOW (zero volts)
   }
+  // Just have the nightlights on all the time.
+   digitalWrite(NIGHT_LIGHT1, HIGH);
+   digitalWrite(NIGHT_LIGHT2, HIGH);
 }
