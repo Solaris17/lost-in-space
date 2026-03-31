@@ -26,6 +26,7 @@
  */
  
 #include "Arduino.h"  // include information about our HERO
+#include <SoftwareSerial.h>  // include the SoftwareSerial library so we can use it to print to the serial monitor
  
 /*
  * #define vs. const
@@ -63,6 +64,8 @@
  * "unsigned char" which are the same as "byte".  We will use the term "byte"
  * in our lessons to indicate 8 bit unsigned integers.
  */
+// Setup software serial
+SoftwareSerial ftdi(A5, A4);
 // #define CABIN_LIGHTS_PIN 10             // pin controlling the cabin lights
 // #define STORAGE_LIGHTS_PIN 11           // pin controlling the storage lights
 // #define COCKPIT_LIGHTS_PIN 12           // pin controlling the exterior lights
@@ -83,13 +86,18 @@ const byte COCKPIT_LIGHTS_SWITCH_PIN = 4;  // exterior lights controlled by swit
  
 // the setup function runs once when you press reset or power the board
 void setup() {
+  // Start the software serial connection to the FTDI adapter so we can print to the serial monitor
+  ftdi.begin(9600);
+
   // Configure our LED control pins as OUTPUT pins
+  ftdi.println("Setting output pins...");
   pinMode(CABIN_LIGHTS_PIN, OUTPUT);    // pin controlling the cabin lights
   pinMode(STORAGE_LIGHTS_PIN, OUTPUT);  // pin controlling the storage lights
   pinMode(COCKPIT_LIGHTS_PIN, OUTPUT);  // pin controlling the exterior lights
   pinMode(NIGHT_LIGHT1, OUTPUT);
   pinMode(NIGHT_LIGHT2, OUTPUT);
  
+  ftdi.println("Setting input pins...");
   // Configure the switch pins as INPUT pins
   pinMode(CABIN_LIGHTS_SWITCH_PIN, INPUT);    // pin connected to switch 1 (cabin lights)
   pinMode(STORAGE_LIGHTS_SWITCH_PIN, INPUT);  // pin connected to switch 2 (storage lights)
@@ -98,7 +106,7 @@ void setup() {
  
 // Each time through loop() we will check each switch in turn and set each light's
 // state appropriately.
-void loop() {
+void loop() {  // print a message to the serial monitor so we can see when we are checking the switches
   // Control cabin lights based on setting on switch 1
   if (digitalRead(CABIN_LIGHTS_SWITCH_PIN) == HIGH) {  // if switch is on (HIGH voltage)
     delay(2000);  // Add a delay to debounce so people can actually see this instead of thinking it works like a normal hard wired switch.
